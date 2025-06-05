@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bruno to Postman Converter</title>
+    <title>🐶 Bruno to 🚀 Postman Converter</title>
     <style>
         * {
             margin: 0;
@@ -12,354 +12,249 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
-            align-items: center;
             justify-content: center;
-            padding: 20px;
+            align-items: center;
         }
 
         .container {
             background: white;
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            width: 100%;
-            max-width: 600px;
-            animation: slideUp 0.6s ease-out;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .header {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
-            color: white;
-            padding: 30px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 90%;
             text-align: center;
         }
 
-        .header h1 {
-            font-size: 2.2em;
-            margin-bottom: 10px;
-            font-weight: 600;
+        .title {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #333;
         }
 
-        .header p {
-            opacity: 0.9;
-            font-size: 1.1em;
-        }
-
-        .content {
-            padding: 40px;
+        .subtitle {
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
         }
 
         .upload-area {
             border: 3px dashed #ddd;
             border-radius: 15px;
-            padding: 50px 20px;
-            text-align: center;
-            transition: all 0.3s ease;
+            padding: 3rem 2rem;
+            margin: 2rem 0;
             cursor: pointer;
+            transition: all 0.3s ease;
             background: #fafafa;
-            position: relative;
-            overflow: hidden;
         }
 
-        .upload-area:hover {
+        .upload-area:hover,
+        .upload-area.dragover {
             border-color: #667eea;
             background: #f0f4ff;
             transform: translateY(-2px);
         }
 
-        .upload-area.dragover {
-            border-color: #667eea;
-            background: #f0f4ff;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
-        }
-
         .upload-icon {
-            font-size: 3em;
+            font-size: 3rem;
+            margin-bottom: 1rem;
             color: #667eea;
-            margin-bottom: 20px;
-            transition: transform 0.3s ease;
-        }
-
-        .upload-area:hover .upload-icon {
-            transform: scale(1.1);
         }
 
         .upload-text {
-            font-size: 1.3em;
-            color: #333;
-            margin-bottom: 10px;
-            font-weight: 500;
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 0.5rem;
         }
 
-        .upload-subtext {
-            color: #666;
-            font-size: 0.9em;
-            margin-bottom: 20px;
+        .upload-hint {
+            color: #888;
+            font-size: 0.9rem;
         }
 
         .file-input {
             display: none;
         }
 
-        .btn-upload {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+        .convert-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            font-size: 1em;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-weight: 500;
+            margin-top: 1rem;
+            display: none;
         }
 
-        .btn-upload:hover {
+        .convert-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
         }
 
-        .loading {
+        .convert-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .progress {
             display: none;
-            text-align: center;
-            padding: 30px;
+            margin-top: 1rem;
         }
 
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #eee;
+            border-radius: 4px;
+            overflow: hidden;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+            animation: pulse 1.5s infinite;
         }
 
-        .success {
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .status {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 10px;
             display: none;
-            text-align: center;
-            padding: 30px;
-            color: #28a745;
         }
 
-        .success-icon {
-            font-size: 4em;
-            margin-bottom: 20px;
-            animation: bounce 0.6s ease-out;
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
         }
 
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-10px);
-            }
-            60% {
-                transform: translateY(-5px);
-            }
-        }
-
-        .error {
-            display: none;
+        .status.error {
             background: #f8d7da;
             color: #721c24;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 20px;
             border: 1px solid #f5c6cb;
-        }
-
-        .error-title {
-            font-weight: 600;
-            margin-bottom: 5px;
         }
 
         .file-info {
             display: none;
             background: #e3f2fd;
-            padding: 15px;
+            padding: 1rem;
             border-radius: 10px;
-            margin-top: 20px;
-            border-left: 4px solid #2196f3;
-        }
-
-        .file-info h4 {
-            color: #1976d2;
-            margin-bottom: 5px;
-        }
-
-        .file-info p {
-            color: #424242;
-            font-size: 0.9em;
-        }
-
-        .convert-btn {
-            display: none;
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 25px;
-            font-size: 1.1em;
-            cursor: pointer;
-            margin-top: 20px;
-            width: 100%;
-            transition: all 0.3s ease;
-            font-weight: 600;
-        }
-
-        .convert-btn:hover {
-            background: #218838;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(40, 167, 69, 0.3);
+            margin: 1rem 0;
+            border-left: 4px solid #2196F3;
         }
 
         .reset-btn {
             background: #6c757d;
             color: white;
             border: none;
-            padding: 10px 25px;
-            border-radius: 20px;
-            font-size: 0.9em;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
             cursor: pointer;
-            margin-top: 15px;
-            transition: all 0.3s ease;
+            margin-left: 1rem;
+            font-size: 0.9rem;
         }
 
         .reset-btn:hover {
             background: #5a6268;
-            transform: translateY(-1px);
         }
 
         .features {
-            background: #f8f9fa;
-            padding: 20px;
-            margin-top: 30px;
-            border-radius: 10px;
+            margin-top: 2rem;
+            text-align: left;
         }
 
         .features h3 {
             color: #333;
-            margin-bottom: 15px;
+            margin-bottom: 1rem;
             text-align: center;
         }
 
-        .features ul {
-            list-style: none;
+        .feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
             color: #666;
         }
 
-        .features li {
-            padding: 5px 0;
-            position: relative;
-            padding-left: 25px;
-        }
-
-        .features li:before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: #28a745;
+        .feature-icon {
+            color: #667eea;
+            margin-right: 0.5rem;
             font-weight: bold;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                margin: 10px;
-            }
-            
-            .header {
-                padding: 20px;
-            }
-            
-            .header h1 {
-                font-size: 1.8em;
-            }
-            
-            .content {
-                padding: 20px;
-            }
-            
-            .upload-area {
-                padding: 30px 15px;
-            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>🐶Bruno → 🚀Postman</h1>
-            <p>Convert your Bruno collections to Postman format instantly</p>
+        <div class="title">🐶➡️🚀</div>
+        <h1>Bruno to Postman Converter</h1>
+        <p class="subtitle">Convert your Bruno collections to Postman v2.1.0 format</p>
+        
+        <div class="upload-area" id="uploadArea">
+            <div class="upload-icon">📁</div>
+            <div class="upload-text">Drop your Bruno JSON file here</div>
+            <div class="upload-hint">or click to browse</div>
         </div>
         
-        <div class="content">
-            <div id="upload-section">
-                <div class="upload-area" id="uploadArea">
-                    <div class="upload-icon">📁</div>
-                    <div class="upload-text">Drop your Bruno JSON file here</div>
-                    <div class="upload-subtext">or click to browse and select a file</div>
-                    <button class="btn-upload">Choose File</button>
-                    <input type="file" id="fileInput" class="file-input" accept=".json">
-                </div>
-                
-                <div class="file-info" id="fileInfo">
-                    <h4>📋 File Selected</h4>
-                    <p id="fileDetails"></p>
-                </div>
-                
-                <button class="convert-btn" id="convertBtn">🚀 Convert to Postman</button>
+        <input type="file" id="fileInput" class="file-input" accept=".json">
+        
+        <div class="file-info" id="fileInfo">
+            <strong>Selected file:</strong> <span id="fileName"></span><br>
+            <strong>Size:</strong> <span id="fileSize"></span>
+        </div>
+        
+        <button class="convert-btn" id="convertBtn">
+            🔄 Convert to Postman
+        </button>
+        
+        <button class="reset-btn" id="resetBtn" style="display: none;">
+            🗑️ Reset
+        </button>
+        
+        <div class="progress" id="progress">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
             </div>
-            
-            <div class="loading" id="loading">
-                <div class="spinner"></div>
-                <p>Converting your Bruno collection...</p>
-                <p style="font-size: 0.9em; color: #666;">This usually takes just a few seconds</p>
+            <div style="margin-top: 0.5rem; color: #666;">Converting...</div>
+        </div>
+        
+        <div class="status" id="status"></div>
+        
+        <div class="features">
+            <h3>✨ Features</h3>
+            <div class="feature">
+                <span class="feature-icon">✅</span>
+                Complete collection hierarchy preservation
             </div>
-            
-            <div class="success" id="success">
-                <div class="success-icon">🎉</div>
-                <h3>Conversion Successful!</h3>
-                <p>Your Postman collection has been downloaded automatically.</p>
-                <button class="reset-btn" onclick="resetForm()">Convert Another File</button>
+            <div class="feature">
+                <span class="feature-icon">🔐</span>
+                All authentication types (Bearer, Basic, OAuth2, etc.)
             </div>
-            
-            <div class="error" id="error">
-                <div class="error-title">❌ Conversion Failed</div>
-                <div id="errorMessage"></div>
-                <button class="reset-btn" onclick="resetForm()" style="margin-top: 10px;">Try Again</button>
+            <div class="feature">
+                <span class="feature-icon">📝</span>
+                Pre-request and test scripts conversion
             </div>
-            
-            <div class="features">
-                <h3>🌟 Features</h3>
-                <ul>
-                    <li>Complete collection conversion with folder structure</li>
-                    <li>Authentication settings preservation</li>
-                    <li>Variables and environment mapping</li>
-                    <li>Pre-request and test scripts conversion</li>
-                    <li>Request headers and body transformation</li>
-                    <li>URL parameters and path variables support</li>
-                </ul>
+            <div class="feature">
+                <span class="feature-icon">🔧</span>
+                Variables and environments mapping
+            </div>
+            <div class="feature">
+                <span class="feature-icon">🚀</span>
+                Drag & drop with automatic download
             </div>
         </div>
     </div>
@@ -367,15 +262,15 @@
     <script>
         const uploadArea = document.getElementById('uploadArea');
         const fileInput = document.getElementById('fileInput');
-        const fileInfo = document.getElementById('fileInfo');
-        const fileDetails = document.getElementById('fileDetails');
         const convertBtn = document.getElementById('convertBtn');
-        const uploadSection = document.getElementById('upload-section');
-        const loading = document.getElementById('loading');
-        const success = document.getElementById('success');
-        const error = document.getElementById('error');
-        const errorMessage = document.getElementById('errorMessage');
-
+        const resetBtn = document.getElementById('resetBtn');
+        const progress = document.getElementById('progress');
+        const progressFill = document.getElementById('progressFill');
+        const status = document.getElementById('status');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        const fileSize = document.getElementById('fileSize');
+        
         let selectedFile = null;
 
         // Upload area click handler
@@ -383,17 +278,13 @@
             fileInput.click();
         });
 
-        // File input change handler
-        fileInput.addEventListener('change', handleFileSelect);
-
         // Drag and drop handlers
         uploadArea.addEventListener('dragover', (e) => {
             e.preventDefault();
             uploadArea.classList.add('dragover');
         });
 
-        uploadArea.addEventListener('dragleave', (e) => {
-            e.preventDefault();
+        uploadArea.addEventListener('dragleave', () => {
             uploadArea.classList.remove('dragover');
         });
 
@@ -402,113 +293,148 @@
             uploadArea.classList.remove('dragover');
             const files = e.dataTransfer.files;
             if (files.length > 0) {
-                handleFile(files[0]);
+                handleFileSelect(files[0]);
             }
         });
 
-        // Convert button handler
-        convertBtn.addEventListener('click', convertFile);
-
-        function handleFileSelect(e) {
-            const file = e.target.files[0];
-            if (file) {
-                handleFile(file);
+        // File input change handler
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFileSelect(e.target.files[0]);
             }
-        }
+        });
 
-        function handleFile(file) {
+        // Handle file selection
+        function handleFileSelect(file) {
             // Validate file type
             if (!file.name.toLowerCase().endsWith('.json')) {
-                showError('Please select a JSON file.', 'Invalid file type');
+                showStatus('Please select a JSON file.', 'error');
                 return;
             }
 
             // Validate file size (10MB limit)
             if (file.size > 10 * 1024 * 1024) {
-                showError('File size must be less than 10MB.', 'File too large');
+                showStatus('File too large. Maximum size is 10MB.', 'error');
                 return;
             }
 
             selectedFile = file;
             
             // Show file info
-            fileDetails.textContent = `${file.name} (${formatFileSize(file.size)})`;
+            fileName.textContent = file.name;
+            fileSize.textContent = formatFileSize(file.size);
             fileInfo.style.display = 'block';
-            convertBtn.style.display = 'block';
             
-            // Hide error if showing
-            error.style.display = 'none';
+            // Show convert button
+            convertBtn.style.display = 'inline-block';
+            resetBtn.style.display = 'inline-block';
+            
+            // Hide any previous status
+            hideStatus();
         }
 
-        async function convertFile() {
-            if (!selectedFile) return;
-
-            // Show loading state
-            uploadSection.style.display = 'none';
-            loading.style.display = 'block';
-            error.style.display = 'none';
-            success.style.display = 'none';
+        // Convert button click handler
+        convertBtn.addEventListener('click', async () => {
+            if (!selectedFile) {
+                showStatus('Please select a file first.', 'error');
+                return;
+            }
 
             try {
+                // Show progress
+                convertBtn.disabled = true;
+                progress.style.display = 'block';
+                animateProgress();
+
+                // Create form data
                 const formData = new FormData();
                 formData.append('brunoFile', selectedFile);
 
-                const response = await fetch('/convert', {
+                // Make request to NEW endpoint
+                const response = await fetch('/api/convert', {  // ✅ FIXED: /api/convert
                     method: 'POST',
                     body: formData
                 });
 
                 if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.details || errorData.error || 'Conversion failed');
+                    // Try to get error details from response
+                    let errorMessage = `HTTP error! status: ${response.status}`;
+                    try {
+                        const errorData = await response.json();
+                        errorMessage = errorData.error || errorData.message || errorMessage;
+                        if (errorData.details) {
+                            errorMessage += ': ' + errorData.details;
+                        }
+                    } catch (e) {
+                        // Response is not JSON, might be HTML error page
+                        const textResponse = await response.text();
+                        if (textResponse.includes('<')) {
+                            errorMessage = 'Server returned HTML instead of JSON. Check server logs.';
+                        }
+                    }
+                    throw new Error(errorMessage);
                 }
 
                 // Get the converted file
                 const blob = await response.blob();
-                const filename = getFilenameFromResponse(response) || 
-                    selectedFile.name.replace('.json', '.postman_collection.json');
-
-                // Download the file
-                downloadFile(blob, filename);
+                
+                // Create download
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = selectedFile.name.replace(/\.json$/, '') + '.postman_collection.json';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
 
                 // Show success
-                loading.style.display = 'none';
-                success.style.display = 'block';
+                showStatus('✅ Conversion successful! Download should start automatically.', 'success');
 
-            } catch (err) {
-                console.error('Conversion error:', err);
-                loading.style.display = 'none';
-                showError(err.message, 'Conversion Error');
-            }
-        }
-
-        function getFilenameFromResponse(response) {
-            const contentDisposition = response.headers.get('Content-Disposition');
-            if (contentDisposition) {
-                const filenameMatch = contentDisposition.match(/filename="(.+)"/);
-                if (filenameMatch) {
-                    return filenameMatch[1];
+                // Get conversion stats from headers
+                const stats = response.headers.get('X-Conversion-Stats');
+                if (stats) {
+                    try {
+                        const parsedStats = JSON.parse(stats);
+                        const statsText = `📊 Converted: ${parsedStats.items} items, ${parsedStats.variables} variables`;
+                        showStatus('✅ Conversion successful! ' + statsText, 'success');
+                    } catch (e) {
+                        // Ignore stats parsing error
+                    }
                 }
+
+            } catch (error) {
+                console.error('Conversion error:', error);
+                showStatus('❌ Conversion Failed: ' + error.message, 'error');
+            } finally {
+                // Hide progress and enable button
+                progress.style.display = 'none';
+                convertBtn.disabled = false;
+                progressFill.style.width = '0%';
             }
-            return null;
+        });
+
+        // Reset button click handler
+        resetBtn.addEventListener('click', () => {
+            selectedFile = null;
+            fileInput.value = '';
+            fileInfo.style.display = 'none';
+            convertBtn.style.display = 'none';
+            resetBtn.style.display = 'none';
+            progress.style.display = 'none';
+            hideStatus();
+        });
+
+        // Utility functions
+        function showStatus(message, type) {
+            status.textContent = message;
+            status.className = `status ${type}`;
+            status.style.display = 'block';
         }
 
-        function downloadFile(blob, filename) {
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(a);
-        }
-
-        function showError(message, title = 'Error') {
-            errorMessage.innerHTML = `<strong>${title}:</strong> ${message}`;
-            error.style.display = 'block';
-            loading.style.display = 'none';
-            uploadSection.style.display = 'block';
+        function hideStatus() {
+            status.style.display = 'none';
         }
 
         function formatFileSize(bytes) {
@@ -519,20 +445,21 @@
             return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
 
-        function resetForm() {
-            selectedFile = null;
-            fileInput.value = '';
-            fileInfo.style.display = 'none';
-            convertBtn.style.display = 'none';
-            error.style.display = 'none';
-            success.style.display = 'none';
-            loading.style.display = 'none';
-            uploadSection.style.display = 'block';
+        function animateProgress() {
+            progressFill.style.width = '100%';
         }
 
-        // Prevent default drag behaviors on the window
-        window.addEventListener('dragover', e => e.preventDefault());
-        window.addEventListener('drop', e => e.preventDefault());
+        // Health check on page load
+        window.addEventListener('load', async () => {
+            try {
+                const response = await fetch('/health');
+                if (!response.ok) {
+                    console.warn('Health check failed');
+                }
+            } catch (error) {
+                console.warn('Could not connect to server:', error);
+            }
+        });
     </script>
 </body>
 </html>
