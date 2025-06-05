@@ -97,7 +97,7 @@ Conversion errors
 Network issues
 
 🔄 Advantages Over CLI Version
-This web app is much more user-friendly than the CLI version:
+This web app is much more user-friendly than CLI version:
 
 No file path management - just drag and drop
 Visual feedback - see progress and results
@@ -135,7 +135,7 @@ Check server logs for detailed error messages
 
 📞 Support
 If you encounter any issues or have questions:
-Send me a message on Slack -> Francesco Aldrovandi
+💬 Send me a message on Slack -> Francesco Aldrovandi
 
 Check the troubleshooting section above
 Review server console logs for detailed error messages
