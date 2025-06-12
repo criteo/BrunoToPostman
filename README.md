@@ -1,4 +1,4 @@
-# ![image](https://github.com/user-attachments/assets/81ee463a-e591-4a93-a78a-7b04b1835af6)  Bruno to 🚀 Postman Converter 🔄
+# <img src="https://github.com/user-attachments/assets/81ee463a-e591-4a93-a78a-7b04b1835af6" alt="dog" width="40"/>  Bruno to 🚀 Postman Converter 🔄
 
 A web application that converts Bruno JSON collections to Postman v2.1.0 format with an intuitive drag-and-drop interface.
 
