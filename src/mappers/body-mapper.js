@@ -1,7 +1,7 @@
 // src/mappers/body-mapper.js
-const { BODY_MODES } = require('../utils/constants');
+import { BODY_MODES } from '../utils/constants.js';
 
-class BodyMapper {
+export default class BodyMapper {
   /**
    * Map Bruno request body to Postman request body
    * @param {Object} body - Bruno body object
@@ -11,7 +11,7 @@ class BodyMapper {
     if (!body || !body.mode || body.mode === BODY_MODES.NONE) {
       return undefined;
     }
-    
+
     const bodyMappers = {
       [BODY_MODES.JSON]: this.mapJson,
       [BODY_MODES.TEXT]: this.mapText,
@@ -44,14 +44,14 @@ class BodyMapper {
    * @returns {Object} Postman raw body with JSON
    */
   static mapJson(body) {
-    const jsonContent = typeof body.json === 'string' 
-      ? body.json 
+    const jsonContent = typeof body.json === 'string'
+      ? body.json
       : JSON.stringify(body.json, null, 2);
-      
-    return { 
-      mode: 'raw', 
-      raw: jsonContent, 
-      options: { raw: { language: 'json' } } 
+
+    return {
+      mode: 'raw',
+      raw: jsonContent,
+      options: { raw: { language: 'json' } }
     };
   }
 
@@ -61,10 +61,10 @@ class BodyMapper {
    * @returns {Object} Postman raw body with text
    */
   static mapText(body) {
-    return { 
-      mode: 'raw', 
-      raw: body.text || '', 
-      options: { raw: { language: 'text' } } 
+    return {
+      mode: 'raw',
+      raw: body.text || '',
+      options: { raw: { language: 'text' } }
     };
   }
 
@@ -74,10 +74,10 @@ class BodyMapper {
    * @returns {Object} Postman raw body with XML
    */
   static mapXml(body) {
-    return { 
-      mode: 'raw', 
-      raw: body.xml || '', 
-      options: { raw: { language: 'xml' } } 
+    return {
+      mode: 'raw',
+      raw: body.xml || '',
+      options: { raw: { language: 'xml' } }
     };
   }
 
@@ -87,10 +87,10 @@ class BodyMapper {
    * @returns {Object} Postman raw body with SPARQL
    */
   static mapSparql(body) {
-    return { 
-      mode: 'raw', 
-      raw: body.sparql || '', 
-      options: { raw: { language: 'text' } } 
+    return {
+      mode: 'raw',
+      raw: body.sparql || '',
+      options: { raw: { language: 'text' } }
     };
   }
 
@@ -101,26 +101,26 @@ class BodyMapper {
    */
   static mapFormData(body) {
     const formData = body.multipartForm || body.formdata || body.form || [];
-    
+
     return {
       mode: 'formdata',
       formdata: formData.map(field => {
-        const item = { 
-          key: field.name || field.key, 
-          type: field.type || 'text', 
-          disabled: field.enabled === false 
+        const item = {
+          key: field.name || field.key,
+          type: field.type || 'text',
+          disabled: field.enabled === false
         };
-        
+
         if (field.type === 'file') {
           item.src = field.value || field.src || '';
         } else {
           item.value = field.value !== undefined ? String(field.value) : '';
         }
-        
+
         if (field.description) {
           item.description = field.description;
         }
-        
+
         return item;
       })
     };
@@ -133,7 +133,7 @@ class BodyMapper {
    */
   static mapUrlEncoded(body) {
     const urlencoded = body.urlencoded || body.formUrlEncoded || [];
-    
+
     return {
       mode: 'urlencoded',
       urlencoded: urlencoded.map(field => ({
@@ -165,8 +165,8 @@ class BodyMapper {
    */
   static mapGraphQL(body) {
     const variables = body.graphql?.variables;
-    const variablesString = typeof variables === 'string' 
-      ? variables 
+    const variablesString = typeof variables === 'string'
+      ? variables
       : JSON.stringify(variables || {});
 
     return {
@@ -178,5 +178,3 @@ class BodyMapper {
     };
   }
 }
-
-module.exports = BodyMapper;

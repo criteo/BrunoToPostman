@@ -1,7 +1,7 @@
 // src/mappers/base-mapper.js
-const { DEFAULT_VALUES } = require('../utils/constants');
+import { DEFAULT_VALUES } from '../utils/constants.js';
 
-class BaseMapper {
+export default class BaseMapper {
   /**
    * Map Bruno headers to Postman headers
    * @param {Array} headers - Bruno headers array
@@ -34,7 +34,7 @@ class BaseMapper {
       ...(varsObj.req || []),
       ...(varsObj.res || [])
     ];
-    
+
     // Remove duplicates by name
     const uniqueVars = {};
     variables.forEach(variable => {
@@ -42,18 +42,18 @@ class BaseMapper {
         uniqueVars[variable.name] = variable;
       }
     });
-    
+
     return Object.values(uniqueVars).map(variable => {
       const mapped = {
         key: variable.name,
         value: variable.value !== undefined ? String(variable.value) : '',
         type: variable.type || 'default'
       };
-      
+
       if (variable.description) {
         mapped.description = variable.description;
       }
-      
+
       return mapped;
     });
   }
@@ -76,9 +76,9 @@ class BaseMapper {
    * @returns {boolean} Whether auth should be included
    */
   static shouldIncludeAuth(auth) {
-    return auth && 
-           auth.mode && 
-           auth.mode !== 'none' && 
+    return auth &&
+           auth.mode &&
+           auth.mode !== 'none' &&
            auth.mode !== 'inherit';
   }
 
@@ -88,8 +88,8 @@ class BaseMapper {
    * @returns {string} Collection name
    */
   static getCollectionName(brunoJson) {
-    return brunoJson.name || 
-           brunoJson.brunoConfig?.name || 
+    return brunoJson.name ||
+           brunoJson.brunoConfig?.name ||
            DEFAULT_VALUES.COLLECTION_NAME;
   }
 
@@ -128,5 +128,3 @@ class BaseMapper {
     return cleaned;
   }
 }
-
-module.exports = BaseMapper;
