@@ -1,7 +1,7 @@
 // src/server.js
-const express = require('express');
-const path = require('path');
-const converterRoutes = require('./routes/converter');
+import express from 'express';
+import path from 'node:path';
+import converterRoutes from './routes/converter.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -34,4 +34,4 @@ app.listen(PORT, () => {
   console.log(`📁 Upload your Bruno JSON files and convert them to Postman format!`);
 });
 
-module.exports = app;
+export default app;

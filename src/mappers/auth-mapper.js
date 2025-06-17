@@ -1,7 +1,7 @@
 // src/mappers/auth-mapper.js
-const { AUTH_TYPES } = require('../utils/constants');
+import { AUTH_TYPES } from '../utils/constants.js';
 
-class AuthMapper {
+export default class AuthMapper {
   /**
    * Map Bruno authentication to Postman authentication
    * @param {Object} auth - Bruno auth object
@@ -40,9 +40,9 @@ class AuthMapper {
    * @returns {Object} Postman OAuth2 auth object
    */
   static mapOAuth2(auth) {
-    return { 
-      type: 'oauth2', 
-      oauth2: this.mapOAuth2Config(auth.oauth2) 
+    return {
+      type: 'oauth2',
+      oauth2: this.mapOAuth2Config(auth.oauth2)
     };
   }
 
@@ -53,7 +53,7 @@ class AuthMapper {
    */
   static mapOAuth2Config(oauth2 = {}) {
     const mapped = [];
-    
+
     const fieldMapping = {
       grant_type: oauth2.grantType || 'authorization_code',
       callback_url: oauth2.callbackUrl,
@@ -74,21 +74,21 @@ class AuthMapper {
       resource: oauth2.resource,
       code_challenge_method: oauth2.codeChallengeMethod
     };
-    
+
     Object.entries(fieldMapping).forEach(([key, value]) => {
       if (value !== undefined && value !== null) {
         mapped.push({ key, value: String(value), type: 'string' });
       }
     });
-    
+
     if (oauth2.pkce !== undefined) {
       mapped.push({ key: 'use_pkce', value: String(oauth2.pkce), type: 'boolean' });
     }
-    
+
     if (oauth2.addTokenTo) {
       mapped.push({ key: 'add_token_to', value: oauth2.addTokenTo, type: 'string' });
     }
-    
+
     return mapped;
   }
 
@@ -100,10 +100,10 @@ class AuthMapper {
   static mapBearer(auth) {
     return {
       type: 'bearer',
-      bearer: [{ 
-        key: 'token', 
-        value: auth.bearer?.token || '', 
-        type: 'string' 
+      bearer: [{
+        key: 'token',
+        value: auth.bearer?.token || '',
+        type: 'string'
       }]
     };
   }
@@ -179,5 +179,3 @@ class AuthMapper {
     };
   }
 }
-
-module.exports = AuthMapper;
