@@ -1,6 +1,7 @@
-# 🐶 Bruno to 🚀 Postman Converter 🔄
+# <img src="https://github.com/user-attachments/assets/81ee463a-e591-4a93-a78a-7b04b1835af6" alt="dog" width="35" height="35" style="vertical-align: middle;"/>  Bruno to <img src="https://github.com/user-attachments/assets/11099409-5b2d-4f5a-b9d8-d66a027e07f7" alt="Postman logo" width="35" height="35" style="vertical-align: middle;"/>  Postman Converter 🔄
 
-A modern, professional web application that converts Bruno JSON collections to Postman v2.1.0 format with an intuitive drag-and-drop interface.
+
+A web application that converts Bruno JSON collections to Postman v2.1.0 format with an intuitive drag-and-drop interface.
 
 ## 📋 Description
 
@@ -43,7 +44,6 @@ bruno-converter/
 ### 1. Prerequisites
 
 - Node.js (version 14.0.0 or higher)
-- npm (comes with Node.js)
 
 ### 2. Installation
 
@@ -102,7 +102,7 @@ Open your browser and go to: http://localhost:3000
 
 ### 🔧 Enhanced Functionality
 
-- Professional modular architecture
+- Modular architecture
 - File validation (JSON only, 10MB limit)
 - Comprehensive error handling
 - Conversion statistics display
@@ -171,11 +171,11 @@ This web app is much more user-friendly than CLI alternatives:
 
 - **No file path management** - just drag and drop
 - **Visual feedback** - see progress and results in real-time
-- **Better error messages** - clear, actionable feedback
+- **Clear error messages** - clear, actionable feedback
 - **Multiple conversions** - easily convert many files
 - **Cross-platform** - works on any device with a browser
 - **No terminal required** - accessible to non-technical users
-- **Professional architecture** - maintainable and extensible
+- **Structured architecture** - maintainable and extensible
 
 ## 🛠️ Troubleshooting
 
