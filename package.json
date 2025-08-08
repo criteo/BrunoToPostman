@@ -1,6 +1,6 @@
 {
   "name": "@criteo/bruno-to-postman-converter",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "A modern web application that converts Bruno JSON collections to Postman v2.1.0 format",
   "main": "src/server.js",
   "scripts": {
