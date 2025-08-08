@@ -1,13 +1,13 @@
 // src/services/bruno-converter.js
-const AuthMapper = require('../mappers/auth-mapper');
-const BodyMapper = require('../mappers/body-mapper');
-const UrlMapper = require('../mappers/url-mapper');
-const ScriptConverter = require('../mappers/script-converter');
-const BaseMapper = require('../mappers/base-mapper');
-const { generatePostmanId } = require('../utils/postman-id');
-const { POSTMAN_SCHEMA, DEFAULT_VALUES } = require('../utils/constants');
+import AuthMapper from '../mappers/auth-mapper.js';
+import BaseMapper from '../mappers/base-mapper.js';
+import BodyMapper from '../mappers/body-mapper.js';
+import ScriptConverter from '../mappers/script-converter.js';
+import UrlMapper from '../mappers/url-mapper.js';
+import { DEFAULT_VALUES, POSTMAN_SCHEMA } from '../utils/constants.js';
+import { generatePostmanId } from '../utils/postman-id.js';
 
-class BrunoConverter {
+export default class BrunoConverter {
   /**
    * Convert Bruno JSON collection to Postman v2.1.0 format
    * @param {Object} brunoJson - Bruno collection JSON
@@ -19,26 +19,26 @@ class BrunoConverter {
     console.log("🔍 Root auth:", brunoJson.root?.request?.auth?.mode || 'none');
 
     const collection = this.createBaseCollection(brunoJson);
-    
+
     // Add collection-level variables
     collection.variable = this.mapCollectionVariables(brunoJson);
-    
+
     // Add collection-level authentication
     this.addCollectionAuth(collection, brunoJson);
-    
+
     // Add collection-level scripts
     this.addCollectionScripts(collection, brunoJson);
-    
+
     // Convert all items (requests and folders)
     collection.item = this.convertItems(brunoJson.items || []);
-    
+
     // Clean up empty auth object
     if (collection.auth && Object.keys(collection.auth).length === 0) {
       delete collection.auth;
     }
-    
+
     console.log(`✅ Conversion completed: ${collection.item.length} items, ${collection.variable.length} variables`);
-    
+
     return collection;
   }
 
@@ -144,31 +144,31 @@ class BrunoConverter {
       name: node.name,
       item: this.convertItems(node.items || [])
     };
-    
+
     // Add folder description
     const description = BaseMapper.getDescription(node.root?.request);
     if (description) {
       folder.description = description;
     }
-    
+
     // Add folder-level scripts
     const events = ScriptConverter.mapFolderScripts(node.root?.request);
     if (events.length > 0) {
       folder.event = events;
     }
-    
+
     // Add folder-level authentication
     const folderAuth = node.root?.request?.auth;
     if (BaseMapper.shouldIncludeAuth(folderAuth)) {
       folder.auth = AuthMapper.map(folderAuth);
     }
-    
+
     // Add folder-level variables
     const folderVars = BaseMapper.mapVariables(node.root?.request?.vars);
     if (folderVars.length > 0) {
       folder.variable = folderVars;
     }
-    
+
     return folder;
   }
 
@@ -183,19 +183,19 @@ class BrunoConverter {
       request: this.mapRequest(node.request),
       response: []
     };
-    
+
     // Add request-level scripts
     const events = ScriptConverter.mapRequestScripts(node.request);
     if (events.length > 0) {
       item.event = events;
     }
-    
+
     // Add request-level variables
     const requestVars = BaseMapper.mapVariables(node.request?.vars);
     if (requestVars.length > 0) {
       item.variable = requestVars;
     }
-    
+
     return item;
   }
 
@@ -210,13 +210,13 @@ class BrunoConverter {
       header: BaseMapper.mapHeaders(brunoRequest.headers),
       url: UrlMapper.map(brunoRequest.url, brunoRequest.params)
     };
-    
+
     // Add request body
     const body = BodyMapper.map(brunoRequest.body);
     if (body) {
       request.body = body;
     }
-    
+
     // Add request description
     const description = BaseMapper.getDescription(brunoRequest);
     if (description) {
@@ -236,5 +236,3 @@ class BrunoConverter {
     return request;
   }
 }
-
-module.exports = BrunoConverter;

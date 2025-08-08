@@ -49,20 +49,12 @@ bruno-converter/
 
 ```bash
 # Clone or create the project directory
-mkdir bruno-converter
-cd bruno-converter
-
-# Create the directory structure
-mkdir -p src/{routes,services,mappers,utils,middleware}
-mkdir -p tests/{unit,integration,fixtures}
-mkdir -p public
-
-# Install dependencies
-npm install
-
-# Optional: Install development dependencies
-npm install --save-dev nodemon jest eslint supertest
+git clone https://github.com/criteo/BrunoToPostman.git
+cd BrunoToPostman/
+NODE_ENV=production npm ci
 ```
+
+Omit `NODE_ENV=production` to also install dev dependencies.
 
 ### 3. Configuration
 
@@ -192,8 +184,7 @@ PORT=3001 npm start
 **Module not found errors:**
 ```bash
 # Reinstall dependencies
-rm -rf node_modules package-lock.json
-npm install
+npm ci
 ```
 
 **File upload fails:**

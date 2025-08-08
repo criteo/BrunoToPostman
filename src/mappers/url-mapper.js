@@ -1,6 +1,6 @@
 // src/mappers/url-mapper.js
 
-class UrlMapper {
+export default class UrlMapper {
   /**
    * Map Bruno URL and parameters to Postman URL object
    * @param {string} rawUrl - Bruno URL string
@@ -9,36 +9,36 @@ class UrlMapper {
    */
   static map(rawUrl = '', params = []) {
     if (!rawUrl) {
-      return { 
-        raw: '', 
-        protocol: '', 
-        host: [], 
-        path: [], 
-        query: [], 
-        variable: [] 
+      return {
+        raw: '',
+        protocol: '',
+        host: [],
+        path: [],
+        query: [],
+        variable: []
       };
     }
 
     const result = { raw: rawUrl };
-    
+
     try {
       const parsedUrl = this.parseUrl(rawUrl);
       Object.assign(result, parsedUrl);
-      
+
       // Add query parameters from params array
       this.addQueryParameters(result, params);
-      
+
       // Add path variables from params array
       this.addPathVariables(result, params, rawUrl);
-      
+
     } catch (error) {
       console.warn('URL parsing in progress ... Parsed manually', error.message);
       const manualParsed = this.parseUrlManually(rawUrl);
       Object.assign(result, manualParsed);
-      
+
       this.addParametersFromArray(result, params);
     }
-    
+
     return result;
   }
 
@@ -50,10 +50,10 @@ class UrlMapper {
   static parseUrl(rawUrl) {
     const hasVariables = rawUrl.includes('{{') && rawUrl.includes('}}');
     const hasPathParams = rawUrl.includes('{') && rawUrl.includes('}');
-    
+
     let urlToParse = rawUrl;
     const varReplacements = [];
-    
+
     // Replace variables with placeholders for parsing
     if (hasVariables) {
       urlToParse = rawUrl.replace(/\{\{([^}]+)\}\}/g, (match, varName) => {
@@ -62,19 +62,19 @@ class UrlMapper {
         return placeholder;
       });
     }
-    
+
     const url = new URL(urlToParse);
-    
+
     // Restore variables in components
     const result = {
       protocol: url.protocol.replace(':', ''),
       host: this.restoreVariables(url.hostname, varReplacements).split('.'),
-      path: url.pathname.split('/').filter(Boolean).map(part => 
+      path: url.pathname.split('/').filter(Boolean).map(part =>
         this.restoreVariables(part, varReplacements)
       ),
       query: []
     };
-    
+
     // Process existing query parameters
     url.searchParams.forEach((value, key) => {
       result.query.push({
@@ -82,7 +82,7 @@ class UrlMapper {
         value: this.restoreVariables(value, varReplacements)
       });
     });
-    
+
     return result;
   }
 
@@ -108,7 +108,7 @@ class UrlMapper {
   static addQueryParameters(result, params) {
     const queryParams = params.filter(p => p.type === 'query');
     const existingKeys = new Set(result.query.map(q => q.key));
-    
+
     queryParams.forEach(param => {
       if (!existingKeys.has(param.name)) {
         const queryParam = {
@@ -116,11 +116,11 @@ class UrlMapper {
           value: param.value !== undefined ? String(param.value) : '',
           disabled: param.enabled === false
         };
-        
+
         if (param.description) {
           queryParam.description = param.description;
         }
-        
+
         result.query.push(queryParam);
       }
     });
@@ -134,7 +134,7 @@ class UrlMapper {
    */
   static addPathVariables(result, params, rawUrl) {
     const pathVars = [];
-    
+
     // Extract path variables from URL pattern
     const hasPathParams = rawUrl.includes('{') && rawUrl.includes('}');
     if (hasPathParams) {
@@ -144,7 +144,7 @@ class UrlMapper {
         pathVars.push({ key: varName, value: '' });
       });
     }
-    
+
     // Merge with path parameters from params array
     params.filter(p => p.type === 'path').forEach(param => {
       const existing = pathVars.find(v => v.key === param.name);
@@ -164,7 +164,7 @@ class UrlMapper {
         pathVars.push(pathVar);
       }
     });
-    
+
     if (pathVars.length > 0) {
       result.variable = pathVars;
     }
@@ -185,7 +185,7 @@ class UrlMapper {
         description: p.description
       }));
     }
-    
+
     const pathParams = params.filter(p => p.type === 'path');
     if (pathParams.length > 0) {
       result.variable = pathParams.map(p => ({
@@ -208,24 +208,24 @@ class UrlMapper {
       path: [],
       query: []
     };
-    
+
     // Extract protocol
     const protocolMatch = url.match(/^([^:]+):\/\//);
     if (protocolMatch) {
       result.protocol = protocolMatch[1];
       url = url.substring(protocolMatch[0].length);
     }
-    
+
     // Split host and path
     const firstSlash = url.indexOf('/');
     let hostPart = url;
     let pathPart = '';
-    
+
     if (firstSlash !== -1) {
       hostPart = url.substring(0, firstSlash);
       pathPart = url.substring(firstSlash + 1);
     }
-    
+
     // Extract query string
     const queryIndex = pathPart.indexOf('?');
     let queryPart = '';
@@ -233,11 +233,11 @@ class UrlMapper {
       queryPart = pathPart.substring(queryIndex + 1);
       pathPart = pathPart.substring(0, queryIndex);
     }
-    
+
     // Parse components
     result.host = hostPart.split('.').filter(Boolean);
     result.path = pathPart.split('/').filter(Boolean);
-    
+
     // Parse query parameters
     if (queryPart) {
       queryPart.split('&').forEach(param => {
@@ -250,9 +250,7 @@ class UrlMapper {
         }
       });
     }
-    
+
     return result;
   }
 }
-
-module.exports = UrlMapper;

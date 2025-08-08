@@ -1,8 +1,8 @@
 // src/utils/constants.js
 
-const POSTMAN_SCHEMA = 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json';
+export const POSTMAN_SCHEMA = 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json';
 
-const AUTH_TYPES = {
+export const AUTH_TYPES = {
   NONE: 'none',
   INHERIT: 'inherit',
   OAUTH2: 'oauth2',
@@ -13,7 +13,7 @@ const AUTH_TYPES = {
   AWS: 'aws'
 };
 
-const BODY_MODES = {
+export const BODY_MODES = {
   NONE: 'none',
   JSON: 'json',
   TEXT: 'text',
@@ -27,21 +27,13 @@ const BODY_MODES = {
   GRAPHQL: 'graphql'
 };
 
-const SCRIPT_EVENT_TYPES = {
+export const SCRIPT_EVENT_TYPES = {
   PREREQUEST: 'prerequest',
   TEST: 'test'
 };
 
-const DEFAULT_VALUES = {
+export const DEFAULT_VALUES = {
   METHOD: 'GET',
   AUTH_TYPE: 'noauth',
   COLLECTION_NAME: 'Converted Collection'
-};
-
-module.exports = {
-  POSTMAN_SCHEMA,
-  AUTH_TYPES,
-  BODY_MODES,
-  SCRIPT_EVENT_TYPES,
-  DEFAULT_VALUES
 };
