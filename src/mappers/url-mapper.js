@@ -32,7 +32,7 @@ class UrlMapper {
       this.addPathVariables(result, params, rawUrl);
       
     } catch (error) {
-      console.warn('URL parsing failed, using manual parsing:', error.message);
+      console.warn('URL parsing in progress ... Parsed manually', error.message);
       const manualParsed = this.parseUrlManually(rawUrl);
       Object.assign(result, manualParsed);
       
